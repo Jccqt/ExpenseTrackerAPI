@@ -34,5 +34,13 @@ app.MapGet("/expenses/{expenseId}", async (int expenseId, ExpenseDb db) =>
     ? Results.Ok(expense)
     : Results.NotFound());
 
+// POST: Add new expense
+app.MapPost("/expenses", async (Expense expense, ExpenseDb db) =>
+{
+    db.Expenses.Add(expense);
+    await db.SaveChangesAsync();
+    return Results.Created($"/expenses/{expense.Id}", expense);
+});
+
 app.Run();
 
