@@ -1,4 +1,5 @@
 using ExpenseTrackerAPI.Context;
+using ExpenseTrackerAPI.Extensions.Endpoints;
 using ExpenseTrackerAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,26 +22,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Endpoints
-
-// GET: Retieve all expenses
-app.MapGet("/expenses", async (ExpenseDb db) =>
-    await db.Expenses.ToListAsync());
-
-// GET: Retrieve a specific expense by ID
-app.MapGet("/expenses/{expenseId}", async (int expenseId, ExpenseDb db) =>
-    await db.Expenses.FindAsync(expenseId)
-    is Expense expense
-    ? Results.Ok(expense)
-    : Results.NotFound());
-
-// POST: Add new expense
-app.MapPost("/expenses", async (Expense expense, ExpenseDb db) =>
-{
-    db.Expenses.Add(expense);
-    await db.SaveChangesAsync();
-    return Results.Created($"/expenses/{expense.Id}", expense);
-});
+// Endpoint Extension
+app.MapExpenseEndpoints();
 
 app.Run();
 
