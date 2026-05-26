@@ -23,6 +23,17 @@ namespace ExpenseTrackerAPI.Extensions.Endpoints
                 await db.SaveChangesAsync();
                 return Results.Created($"/expenses/{expense.Id}", expense);
             });
+
+            group.MapDelete("/{expenseId}", async (int expenseId, ExpenseDb db) =>
+            {
+                if (await db.Expenses.FindAsync(expenseId) is Expense expense)
+                {
+                    db.Expenses.Remove(expense);
+                    await db.SaveChangesAsync();
+                    return Results.NoContent();
+                }
+                return Results.NotFound();
+            });
         }
     }
 }
