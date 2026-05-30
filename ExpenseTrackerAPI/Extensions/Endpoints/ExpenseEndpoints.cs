@@ -1,6 +1,7 @@
 ﻿using ExpenseTrackerAPI.Context;
 using ExpenseTrackerAPI.Interface;
 using ExpenseTrackerAPI.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTrackerAPI.Extensions.Endpoints
@@ -14,10 +15,12 @@ namespace ExpenseTrackerAPI.Extensions.Endpoints
             group.MapGet("/", async (IExpenseRepository repo) =>
                 Results.Ok(await repo.GetAllExpenses()));
 
-            group.MapGet("/{id}", async (int id, ExpenseDb db) =>
-                await db.Expenses.FindAsync(id)
-                    is Expense expense ? Results.Ok(expense) : Results.NotFound());
-
+            group.MapGet("/{expenseId}", async (int expenseId, IExpenseRepository repo) =>
+            {
+                var expense = await repo.GetExpenseById(expenseId);
+                return expense is not null ? Results.Ok(expense) : Results.NotFound(expense);
+            });
+                
             group.MapPost("/", async (Expense expense, ExpenseDb db) =>
             {
                 db.Expenses.Add(expense);

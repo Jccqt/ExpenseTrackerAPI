@@ -25,5 +25,20 @@ namespace ExpenseTrackerAPI.Repository
                     DateLogged = e.DateLogged
                 }).ToListAsync();
         }
+
+        public async Task<ExpenseDTO> GetExpenseById(int expenseId)
+        {
+            var expense = await _db.Expenses.FindAsync(expenseId);
+
+            if (expense == null) return null;
+
+            return new ExpenseDTO
+            {
+                Id = expense.Id,
+                Description = expense.Description,
+                Amount = expense.Amount,
+                DateLogged = expense.DateLogged
+            };
+        }
     }
 }
