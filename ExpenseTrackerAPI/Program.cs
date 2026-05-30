@@ -1,6 +1,8 @@
 using ExpenseTrackerAPI.Context;
 using ExpenseTrackerAPI.Extensions.Endpoints;
+using ExpenseTrackerAPI.Interface;
 using ExpenseTrackerAPI.Models;
+using ExpenseTrackerAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ExpenseDb>(opt => opt.UseInMemoryDatabase("ExpenseList"));
+
+builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
