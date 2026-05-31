@@ -1,4 +1,5 @@
 ﻿using ExpenseTrackerAPI.Context;
+using ExpenseTrackerAPI.DTOs;
 using ExpenseTrackerAPI.Interface;
 using ExpenseTrackerAPI.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -21,10 +22,9 @@ namespace ExpenseTrackerAPI.Extensions.Endpoints
                 return expense is not null ? Results.Ok(expense) : Results.NotFound(expense);
             });
                 
-            group.MapPost("/", async (Expense expense, ExpenseDb db) =>
+            group.MapPost("/", async (ExpenseCreateDTO dto, IExpenseRepository repo) =>
             {
-                db.Expenses.Add(expense);
-                await db.SaveChangesAsync();
+                var expense = await repo.CreateExpense(dto);
                 return Results.Created($"/expenses/{expense.Id}", expense);
             });
 

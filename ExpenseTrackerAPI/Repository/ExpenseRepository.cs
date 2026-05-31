@@ -1,6 +1,7 @@
 ﻿using ExpenseTrackerAPI.Context;
 using ExpenseTrackerAPI.DTOs;
 using ExpenseTrackerAPI.Interface;
+using ExpenseTrackerAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTrackerAPI.Repository
@@ -38,6 +39,27 @@ namespace ExpenseTrackerAPI.Repository
                 Description = expense.Description,
                 Amount = expense.Amount,
                 DateLogged = expense.DateLogged
+            };
+        }
+
+        public async Task<ExpenseDTO> CreateExpense(ExpenseCreateDTO expense)
+        {
+            var newExpense = new Expense
+            {
+                Description = expense.Description,
+                Amount = expense.Amount,
+                DateLogged = DateTime.UtcNow
+            };
+
+            _db.Expenses.Add(newExpense);
+            await _db.SaveChangesAsync();
+
+            return new ExpenseDTO
+            {
+                Id = newExpense.Id,
+                Description = newExpense.Description,
+                Amount = newExpense.Amount,
+                DateLogged = newExpense.DateLogged
             };
         }
     }
