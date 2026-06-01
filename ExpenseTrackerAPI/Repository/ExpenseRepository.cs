@@ -15,9 +15,10 @@ namespace ExpenseTrackerAPI.Repository
             _db = db;
         }
 
-        public async Task<List<ExpenseDTO>> GetAllExpenses()
+        public async Task<ServiceResponse<List<ExpenseDTO>>> GetAllExpenses()
         {
-            return await _db.Expenses
+            var response = new ServiceResponse<List<ExpenseDTO>>();
+            var expenses = await _db.Expenses
                 .Select(e => new ExpenseDTO
                 {
                     Id = e.Id,
@@ -25,6 +26,19 @@ namespace ExpenseTrackerAPI.Repository
                     Amount = e.Amount,
                     DateLogged = e.DateLogged
                 }).ToListAsync();
+
+            if(expenses.Count > 0)
+            {
+                response.Success = true;
+                response.Message = "Expenses found.";
+                response.Data = expenses;
+            }
+            else
+            {
+                response.Message = "No expenses found.";
+            }
+
+            return response;
         }
 
         public async Task<ExpenseDTO> GetExpenseById(int expenseId)
