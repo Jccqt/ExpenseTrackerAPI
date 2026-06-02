@@ -41,19 +41,30 @@ namespace ExpenseTrackerAPI.Repository
             return response;
         }
 
-        public async Task<ExpenseDTO> GetExpenseById(int expenseId)
+        public async Task<ServiceResponse<ExpenseDTO>> GetExpenseById(int expenseId)
         {
+            var response = new ServiceResponse<ExpenseDTO>();
             var expense = await _db.Expenses.FindAsync(expenseId);
 
-            if (expense == null) return null;
+            if (expense == null)
+            {
+                response.Message = "Expense not found.";
+                return response;
+            }
 
-            return new ExpenseDTO
+            var result = new ExpenseDTO
             {
                 Id = expense.Id,
                 Description = expense.Description,
                 Amount = expense.Amount,
                 DateLogged = expense.DateLogged
             };
+
+            response.Success = true;
+            response.Message = "Expense found.";
+            response.Data = result;
+
+            return response;
         }
 
         public async Task<ExpenseDTO> CreateExpense(ExpenseCreateDTO expense)

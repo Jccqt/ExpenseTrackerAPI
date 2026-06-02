@@ -22,8 +22,8 @@ namespace ExpenseTrackerAPI.Extensions.Endpoints
 
             group.MapGet("/{expenseId}", async (int expenseId, IExpenseRepository repo) =>
             {
-                var expense = await repo.GetExpenseById(expenseId);
-                return expense is not null ? Results.Ok(expense) : Results.NotFound(expense);
+                var result = await repo.GetExpenseById(expenseId);
+                return result.Success ? Results.Ok(result) : Results.NotFound(result);
             });
                 
             group.MapPost("/", async (ExpenseCreateDTO dto, IExpenseRepository repo) =>
