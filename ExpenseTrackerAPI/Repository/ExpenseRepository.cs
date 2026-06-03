@@ -67,8 +67,10 @@ namespace ExpenseTrackerAPI.Repository
             return response;
         }
 
-        public async Task<ExpenseDTO> CreateExpense(ExpenseCreateDTO expense)
+        public async Task<ServiceResponse<ExpenseDTO>> CreateExpense(ExpenseCreateDTO expense)
         {
+            var response = new ServiceResponse<ExpenseDTO>();
+
             var newExpense = new Expense
             {
                 Description = expense.Description,
@@ -79,13 +81,19 @@ namespace ExpenseTrackerAPI.Repository
             _db.Expenses.Add(newExpense);
             await _db.SaveChangesAsync();
 
-            return new ExpenseDTO
+            var result = new ExpenseDTO
             {
                 Id = newExpense.Id,
                 Description = newExpense.Description,
                 Amount = newExpense.Amount,
                 DateLogged = newExpense.DateLogged
             };
+
+            response.Success = true;
+            response.Message = "Expense added successfully.";
+            response.Data = result;
+
+            return response;
         }
     }
 }
