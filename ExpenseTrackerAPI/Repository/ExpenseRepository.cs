@@ -95,5 +95,43 @@ namespace ExpenseTrackerAPI.Repository
 
             return response;
         }
+
+        public async Task<ServiceResponse<ExpenseDTO>> UpdateExpense(int expenseId, ExpenseUpdateDTO updatedExpense)
+        {
+            var response = new ServiceResponse<ExpenseDTO>();
+            var expense = await _db.Expenses.FindAsync(expenseId);
+
+            if(expense == null)
+            {
+                response.Message = "Expense not found.";
+                return response;
+            }
+
+            if (updatedExpense.Description != null)
+            {
+                expense.Description = updatedExpense.Description;
+            }
+
+            if (updatedExpense.Amount != null)
+            {
+                expense.Amount = updatedExpense.Amount.Value;
+            }
+
+            await _db.SaveChangesAsync();
+
+            var result = new ExpenseDTO
+            {
+                Id = expense.Id,
+                Description = expense.Description,
+                Amount = expense.Amount,
+                DateLogged = expense.DateLogged
+            };
+
+            response.Success = true;
+            response.Message = "Expense updated successfully.";
+            response.Data = result;
+
+            return response;
+        }
     }
 }

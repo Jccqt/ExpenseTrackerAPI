@@ -29,7 +29,14 @@ namespace ExpenseTrackerAPI.Extensions.Endpoints
             group.MapPost("/", async (ExpenseCreateDTO dto, IExpenseRepository repo) =>
             {
                 var result = await repo.CreateExpense(dto);
-                return Results.Created($"/expenses/{result.Id}", result);
+                return Results.Created($"/expenses/{result.Data.Id}", result);
+            });
+
+            group.MapPatch("/{expenseId}", async (int expenseId, ExpenseUpdateDTO dto, IExpenseRepository repo) =>
+            {
+                var result = await repo.UpdateExpense(expenseId, dto);
+
+                return result.Success ? Results.Ok(result) : Results.NotFound(result);
             });
 
             group.MapDelete("/{expenseId}", async (int expenseId, ExpenseDb db) =>
