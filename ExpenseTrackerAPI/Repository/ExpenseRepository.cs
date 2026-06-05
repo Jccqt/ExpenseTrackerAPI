@@ -133,5 +133,25 @@ namespace ExpenseTrackerAPI.Repository
 
             return response;
         }
+
+        public async Task<ServiceResponse> DeleteExpense(int expenseId)
+        {
+            var response = new ServiceResponse();
+            var expense = await _db.Expenses.FindAsync(expenseId);
+
+            if (expense == null)
+            {
+                response.Message = "Expense not found.";
+                return response;
+            }
+
+            _db.Expenses.Remove(expense);
+            await _db.SaveChangesAsync();
+
+            response.Success = true;
+            response.Message = "Expense deleted successfully.";
+
+            return response;
+        }
     }
 }

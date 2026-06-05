@@ -39,15 +39,11 @@ namespace ExpenseTrackerAPI.Extensions.Endpoints
                 return result.Success ? Results.Ok(result) : Results.NotFound(result);
             });
 
-            group.MapDelete("/{expenseId}", async (int expenseId, ExpenseDb db) =>
+            group.MapDelete("/{expenseId}", async (int expenseId, IExpenseRepository repo) =>
             {
-                if (await db.Expenses.FindAsync(expenseId) is Expense expense)
-                {
-                    db.Expenses.Remove(expense);
-                    await db.SaveChangesAsync();
-                    return Results.NoContent();
-                }
-                return Results.NotFound();
+                var result = await repo.DeleteExpense(expenseId);
+
+                return result.Success ? Results.Ok(result) : Results.NotFound(result);
             });
         }
     }

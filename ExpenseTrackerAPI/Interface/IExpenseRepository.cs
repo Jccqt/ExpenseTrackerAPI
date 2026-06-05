@@ -9,5 +9,6 @@ namespace ExpenseTrackerAPI.Interface
         Task<ServiceResponse<ExpenseDTO>> GetExpenseById(int expenseId);
         Task<ServiceResponse<ExpenseDTO>> CreateExpense(ExpenseCreateDTO expense);
         Task<ServiceResponse<ExpenseDTO>> UpdateExpense(int expenseId, ExpenseUpdateDTO updatedExpense);
+        Task<ServiceResponse> DeleteExpense(int expenseId);
     }
 }
