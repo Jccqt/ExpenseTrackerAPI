@@ -134,6 +134,27 @@ namespace ExpenseTrackerAPI.Repository
             return response;
         }
 
+        public async Task<ServiceResponse> UpdateExpenseStatus(int expenseId, int status)
+        {
+            var response = new ServiceResponse();
+            var expense = await _db.Expenses.FindAsync(expenseId);
+
+            if(expense == null)
+            {
+                response.Message = "Expense not found.";
+                return response;
+            }
+
+            expense.Status = status;
+
+            await _db.SaveChangesAsync();
+
+            response.Success = true;
+            response.Message = "Expense status updated successfully.";
+
+            return response;
+        }
+
         public async Task<ServiceResponse> DeleteExpense(int expenseId)
         {
             var response = new ServiceResponse();
