@@ -3,6 +3,7 @@ using ExpenseTrackerAPI.DTOs;
 using ExpenseTrackerAPI.Interface;
 using ExpenseTrackerAPI.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTrackerAPI.Extensions.Endpoints
@@ -35,6 +36,13 @@ namespace ExpenseTrackerAPI.Extensions.Endpoints
             group.MapPatch("/{expenseId}", async (int expenseId, ExpenseUpdateDTO dto, IExpenseRepository repo) =>
             {
                 var result = await repo.UpdateExpense(expenseId, dto);
+
+                return result.Success ? Results.Ok(result) : Results.NotFound(result);
+            });
+
+            group.MapPatch("/{expenseId}/status", async (int expenseId, [FromBody] int status, IExpenseRepository repo) =>
+            {
+                var result = await repo.UpdateExpenseStatus(expenseId, status);
 
                 return result.Success ? Results.Ok(result) : Results.NotFound(result);
             });
