@@ -19,6 +19,7 @@ namespace ExpenseTrackerAPI.Repository
         {
             var response = new ServiceResponse<List<ExpenseDTO>>();
             var expenses = await _db.Expenses
+                .AsNoTracking()
                 .Select(e => new ExpenseDTO
                 {
                     Id = e.Id,
