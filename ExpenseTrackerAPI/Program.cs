@@ -15,6 +15,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ExpenseDb>(opt => opt.UseInMemoryDatabase("ExpenseList"));
 
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+
+builder.Services.AddExceptionHandler<ExpenseTrackerAPI.Middleware.GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,6 +29,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
 
 // Endpoint Extension
 app.MapExpenseEndpoints();
