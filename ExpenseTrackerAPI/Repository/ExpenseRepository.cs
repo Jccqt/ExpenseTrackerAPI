@@ -102,7 +102,9 @@ namespace ExpenseTrackerAPI.Repository
         public async Task<ServiceResponse<ExpenseDTO>> UpdateExpense(int expenseId, ExpenseUpdateDTO updatedExpense)
         {
             var response = new ServiceResponse<ExpenseDTO>();
-            var expense = await _db.Expenses.FindAsync(expenseId);
+            var expense = await _db.Expenses
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == expenseId);
 
             if(expense == null)
             {
