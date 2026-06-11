@@ -102,11 +102,9 @@ namespace ExpenseTrackerAPI.Repository
         public async Task<ServiceResponse<ExpenseDTO>> UpdateExpense(int expenseId, ExpenseUpdateDTO updatedExpense)
         {
             var response = new ServiceResponse<ExpenseDTO>();
-            var expense = await _db.Expenses
-                .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.Id == expenseId);
+            var expense = await _db.Expenses.FindAsync(expenseId);
 
-            if(expense == null)
+            if (expense == null)
             {
                 response.Message = "Expense not found.";
                 return response;
@@ -142,11 +140,9 @@ namespace ExpenseTrackerAPI.Repository
         public async Task<ServiceResponse> UpdateExpenseStatus(int expenseId, int status)
         {
             var response = new ServiceResponse();
-            var expense = await _db.Expenses
-                .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.Id == expenseId);
+            var expense = await _db.Expenses.FindAsync(expenseId);
 
-            if(expense == null)
+            if (expense == null)
             {
                 response.Message = "Expense not found.";
                 return response;
@@ -165,9 +161,7 @@ namespace ExpenseTrackerAPI.Repository
         public async Task<ServiceResponse> DeleteExpense(int expenseId)
         {
             var response = new ServiceResponse();
-            var expense = await _db.Expenses
-                .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.Id == expenseId);
+            var expense = await _db.Expenses.FindAsync(expenseId);
 
             if (expense == null)
             {
