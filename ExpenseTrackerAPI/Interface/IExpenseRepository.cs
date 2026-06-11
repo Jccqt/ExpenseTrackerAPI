@@ -5,7 +5,7 @@ namespace ExpenseTrackerAPI.Interface
 {
     public interface IExpenseRepository
     {
-        Task<ServiceResponse<List<ExpenseDTO>>> GetAllExpenses();
+        Task<ServiceResponse<List<ExpenseDTO>>> GetAllExpenses(CancellationToken ct = default);
         Task<ServiceResponse<ExpenseDTO>> GetExpenseById(int expenseId);
         Task<ServiceResponse<ExpenseDTO>> CreateExpense(ExpenseCreateDTO expense);
         Task<ServiceResponse<ExpenseDTO>> UpdateExpense(int expenseId, ExpenseUpdateDTO updatedExpense);

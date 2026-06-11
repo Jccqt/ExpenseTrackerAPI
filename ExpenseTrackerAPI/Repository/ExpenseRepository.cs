@@ -15,7 +15,7 @@ namespace ExpenseTrackerAPI.Repository
             _db = db;
         }
 
-        public async Task<ServiceResponse<List<ExpenseDTO>>> GetAllExpenses()
+        public async Task<ServiceResponse<List<ExpenseDTO>>> GetAllExpenses(CancellationToken ct)
         {
             var response = new ServiceResponse<List<ExpenseDTO>>();
             var expenses = await _db.Expenses
@@ -26,7 +26,7 @@ namespace ExpenseTrackerAPI.Repository
                     Description = e.Description,
                     Amount = e.Amount,
                     DateLogged = e.DateLogged
-                }).ToListAsync();
+                }).ToListAsync(ct);
 
             if(expenses.Count > 0)
             {

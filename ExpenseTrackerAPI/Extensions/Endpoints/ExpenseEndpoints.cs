@@ -14,9 +14,9 @@ namespace ExpenseTrackerAPI.Extensions.Endpoints
         {
             var group = app.MapGroup("/expenses");
 
-            group.MapGet("/", async (IExpenseRepository repo) =>
+            group.MapGet("/", async (IExpenseRepository repo, CancellationToken ct) =>
             {
-                var results = await repo.GetAllExpenses();
+                var results = await repo.GetAllExpenses(ct);
 
                 return results.Success ? Results.Ok(results) : Results.NotFound(results);
             });
