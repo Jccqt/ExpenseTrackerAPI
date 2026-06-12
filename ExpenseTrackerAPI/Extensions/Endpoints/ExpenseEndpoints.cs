@@ -27,9 +27,9 @@ namespace ExpenseTrackerAPI.Extensions.Endpoints
                 return result.Success ? Results.Ok(result) : Results.NotFound(result);
             });
                 
-            group.MapPost("/", async (ExpenseCreateDTO dto, IExpenseRepository repo) =>
+            group.MapPost("/", async (ExpenseCreateDTO dto, IExpenseRepository repo, CancellationToken ct) =>
             {
-                var result = await repo.CreateExpense(dto);
+                var result = await repo.CreateExpense(dto, ct);
                 return Results.Created($"/expenses/{result.Data.Id}", result);
             });
 

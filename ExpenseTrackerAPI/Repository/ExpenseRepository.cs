@@ -70,7 +70,7 @@ namespace ExpenseTrackerAPI.Repository
             return response;
         }
 
-        public async Task<ServiceResponse<ExpenseDTO>> CreateExpense(ExpenseCreateDTO expense)
+        public async Task<ServiceResponse<ExpenseDTO>> CreateExpense(ExpenseCreateDTO expense, CancellationToken ct)
         {
             var response = new ServiceResponse<ExpenseDTO>();
 
@@ -82,7 +82,7 @@ namespace ExpenseTrackerAPI.Repository
             };
 
             _db.Expenses.Add(newExpense);
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync(ct);
 
             var result = new ExpenseDTO
             {
