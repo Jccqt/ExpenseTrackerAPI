@@ -42,12 +42,12 @@ namespace ExpenseTrackerAPI.Repository
             return response;
         }
 
-        public async Task<ServiceResponse<ExpenseDTO>> GetExpenseById(int expenseId)
+        public async Task<ServiceResponse<ExpenseDTO>> GetExpenseById(int expenseId, CancellationToken ct)
         {
             var response = new ServiceResponse<ExpenseDTO>();
             var expense = await _db.Expenses
                 .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.Id == expenseId);
+                .FirstOrDefaultAsync(e => e.Id == expenseId, ct);
 
             if (expense == null)
             {

@@ -21,9 +21,9 @@ namespace ExpenseTrackerAPI.Extensions.Endpoints
                 return results.Success ? Results.Ok(results) : Results.NotFound(results);
             });
 
-            group.MapGet("/{expenseId}", async (int expenseId, IExpenseRepository repo) =>
+            group.MapGet("/{expenseId}", async (int expenseId, IExpenseRepository repo, CancellationToken ct) =>
             {
-                var result = await repo.GetExpenseById(expenseId);
+                var result = await repo.GetExpenseById(expenseId, ct);
                 return result.Success ? Results.Ok(result) : Results.NotFound(result);
             });
                 
